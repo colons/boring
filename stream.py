@@ -1,3 +1,4 @@
+import re
 from random import random
 from string import ascii_letters
 import json
@@ -20,15 +21,15 @@ def stut(word, chance=.4):
 
 
 def tsun(string, verboten):
-    words = []
+    def stut_if_not_verboten(match):
+        word = match.group(0)
 
-    for original_word in string.split():
-        if original_word in verboten:
-            words.append(original_word)
+        if word not in verboten:
+            return stut(word)
         else:
-            words.append(stut(original_word))
+            return word
 
-    return u' '.join(words)
+    return re.sub(r'\b\S+\b', stut_if_not_verboten, string)
 
 
 class TsundereRepeater(tweepy.StreamListener):
