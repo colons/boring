@@ -32,6 +32,13 @@ def tsun(string, verboten):
     return re.sub(r'\b\S+\b', stut_if_not_verboten, string)
 
 
+def unescape(string):
+    for bad, sub in [('&amp;', '&'), ('&lt;', '<'), ('&gt;', '>')]:
+        string = string.replace(bad, sub)
+
+    return string
+
+
 class TsundereRepeater(tweepy.StreamListener):
     def on_data(self, data):
         tweet = json.loads(data)
@@ -70,7 +77,7 @@ class TsundereRepeater(tweepy.StreamListener):
         tsun_tweet = tsun(tweet['text'], verboten)
 
         try:
-            api.update_status(tsun_tweet)
+            api.update_status(unescape(tsun_tweet))
         except tweepy.error.TweepError as error:
             print 'tweeting failed with %r' % error
 
