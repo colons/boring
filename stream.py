@@ -14,7 +14,7 @@ api = tweepy.API(auth)
 
 
 def stut(word, chance=.4):
-    if random() < chance and word[0] in ascii_letters:
+    if random() < chance and word[0] in ascii_letters and len(word) > 1:
         return u'%s-%s' % (word[0], stut(word, chance/2))
     else:
         return word
