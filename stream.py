@@ -71,7 +71,7 @@ class TsundereRepeater(tweepy.StreamListener):
         ] + [
             media['url'] for media in goel(tweet['entities'], 'media')
         ] + [
-            u'#%s' % tag['text'] for tag in goel(tweet['entities'], 'hashtags')
+            tag['text'] for tag in goel(tweet['entities'], 'hashtags')
         ]
 
         tsun_tweet = tsun(tweet['text'], verboten)
