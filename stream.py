@@ -15,12 +15,12 @@ api = tweepy.API(auth)
 
 def stut(word, chance=.4):
     if random() < chance and word[0] in ascii_letters and len(word) > 1:
-        return u'%s-%s' % (word[0], stut(word, chance/2))
+        return u'%s-%s' % (word[0], stut(word, chance*.8))
     else:
         return word
 
 
-def tsun(string, verboten):
+def tsun(string, verboten=[]):
     def stut_if_not_verboten(match):
         word = match.group(0)
 
