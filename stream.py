@@ -13,7 +13,7 @@ auth.set_access_token(keys.token, keys.secret)
 api = tweepy.API(auth)
 
 
-def stut(word, chance=.4):
+def stut(word, chance):
     if random() < chance and word[0] in ascii_letters and len(word) > 1:
         return u'%s-%s' % (word[0], stut(word, chance*.8))
     else:
@@ -21,15 +21,25 @@ def stut(word, chance=.4):
 
 
 def tsun(string, verboten=[]):
-    def stut_if_not_verboten(match):
-        word = match.group(0)
+    if len(string) >= 140:
+        return string
 
+    def stut_if_not_verboten(word, chance):
         if word not in verboten:
-            return stut(word)
+            stutted = stut(word, chance)
+            return stutted
         else:
             return word
 
-    return re.sub(r'\b\S+\b', stut_if_not_verboten, string)
+    result = None
+    chance = .4
+
+    while result is None or len(result) > 140:
+        stut_adjusted = lambda m: stut_if_not_verboten(m.group(0), chance)
+        result = re.sub(r'\b\S+\b', stut_adjusted, string)
+        chance *= .75
+
+    return result
 
 
 def unescape(string):
