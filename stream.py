@@ -84,10 +84,10 @@ class TsundereRepeater(tweepy.StreamListener):
             tag['text'] for tag in goel(tweet['entities'], 'hashtags')
         ]
 
-        tsun_tweet = tsun(tweet['text'], verboten)
+        tsun_tweet = tsun(unescape(tweet['text']), verboten)
 
         try:
-            api.update_status(unescape(tsun_tweet))
+            api.update_status(tsun_tweet)
         except tweepy.error.TweepError as error:
             print 'tweeting failed with %r' % error
 
