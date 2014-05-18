@@ -13,6 +13,9 @@ auth.set_access_token(keys.token, keys.secret)
 api = tweepy.API(auth)
 
 
+TWEETS = {}
+
+
 def stut(word, chance):
     if random() < chance and word[0] in ascii_letters and len(word) > 1:
         return u'%s-%s' % (word[0], stut(word, chance*.8))
@@ -53,6 +56,13 @@ class TsundereRepeater(tweepy.StreamListener):
     def on_data(self, data):
         tweet = json.loads(data)
 
+        if 'delete' in tweet:
+            delete_id = tweet['delete']['status']['id_str']
+            if delete_id in TWEETS:
+                print 'deleting'
+                TWEETS[delete_id].destroy()
+                return True
+
         if 'text' not in tweet:
             print 'not a tweet'
             return True
@@ -87,9 +97,11 @@ class TsundereRepeater(tweepy.StreamListener):
         tsun_tweet = tsun(unescape(tweet['text']), verboten)
 
         try:
-            api.update_status(tsun_tweet)
+            tsun_tweet = api.update_status(tsun_tweet)
         except tweepy.error.TweepError as error:
             print 'tweeting failed with %r' % error
+        else:
+            TWEETS[tweet['id_str']] = tsun_tweet
 
         return True
 
