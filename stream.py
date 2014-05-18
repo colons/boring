@@ -53,7 +53,7 @@ class TsundereRepeater(tweepy.StreamListener):
     def on_data(self, data):
         tweet = json.loads(data)
 
-        if not 'text' in tweet:
+        if 'text' not in tweet:
             print 'not a tweet'
             return True
 
