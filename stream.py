@@ -101,6 +101,7 @@ class TsundereRepeater(tweepy.StreamListener):
         except tweepy.error.TweepError as error:
             print 'tweeting failed with %r' % error
         else:
+            print 'tweeted %r' % tsun_tweet
             TWEETS[tweet['id_str']] = tsun_tweet
 
         return True
